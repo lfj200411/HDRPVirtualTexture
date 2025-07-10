@@ -15,6 +15,7 @@ namespace NoOvertime.VirtualTexture
 
         public FeedBackPass(ProfilerMarker feedBackMarker)
         {
+            name = nameof(FeedBackPass);
             _feedBackMarker = feedBackMarker;
         }
 

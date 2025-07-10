@@ -1,7 +1,6 @@
 ﻿using System;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 

@@ -20,6 +20,7 @@ namespace NoOvertime.VirtualTexture
 
         public ReallocateVirtualPagePass(ProfilerMarker reallocateVirtualPageMarker)
         {
+            name = nameof(ReallocateVirtualPagePass);
             _reallocateVirtualPageMarker = reallocateVirtualPageMarker;
             _delayRemoveSectors = new List<KeyValuePair<int2, int4>>();
             _delayRemoveImages = new Dictionary<int2, (int4, int4)>();

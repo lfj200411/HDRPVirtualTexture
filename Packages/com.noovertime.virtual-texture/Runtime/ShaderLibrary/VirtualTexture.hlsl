@@ -92,7 +92,7 @@ uint2 GetVirtualPageID(float3 positionWS, out float mip, out uint virtualPageSiz
     // indirection texture上每个pixel对应一个physical page, 对应(1024x1024)这么多个page
     // feedback输出的pageID其实是indirection texture的texel position
     const uint packedImageInfo = LOAD_TEXTURE2D(Sector2VirtualImageInfoTexture, positionWS.xz / 64);
-    uint3 imageInfo = uint3(packedImageInfo >> 20, (packedImageInfo >> 8) & 0xFFF, packedImageInfo & 0xF);
+    uint3 imageInfo = uint3(packedImageInfo >> 20, (packedImageInfo >> 8) & 0xFFF, packedImageInfo & 0xFF);
     virtualPageSizeLog = imageInfo.z;
     mip = MipLevelAnisotropy(positionWS.xz, MAX_TEXEL_DENSITY) - MAX_VIRTUAL_PAGE_SIZE_SHIFT + virtualPageSizeLog;
     mip = clamp(mip, 0, virtualPageSizeLog);

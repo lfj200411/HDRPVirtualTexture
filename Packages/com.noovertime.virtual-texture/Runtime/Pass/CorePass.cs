@@ -27,6 +27,7 @@ namespace NoOvertime.VirtualTexture
 
         public CorePass()
         {
+            name = nameof(CorePass);
             _bindResourcePass = new BindResourcePass();
             _reallocateVirtualPagePass = new ReallocateVirtualPagePass(_reallocateVirtualPageMarker)
             {

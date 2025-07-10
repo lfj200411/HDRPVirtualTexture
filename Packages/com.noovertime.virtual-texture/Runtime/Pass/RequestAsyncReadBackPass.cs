@@ -17,19 +17,27 @@ namespace NoOvertime.VirtualTexture
 
         public RequestAsyncReadBackPass(Action<AsyncGPUReadbackRequest> callback, ProfilerMarker requestAsyncReadBackMarker)
         {
+            name = nameof(RequestAsyncReadBackPass);
             _callback = callback;
             _requestAsyncReadBackMarker = requestAsyncReadBackMarker;
         }
 
         public async void Dispose()
         {
-            var readBackArray = Context.Instance.ReadBackArray;
-            if (IsReadingBack)
+            try
             {
-                await Task.Yield();
-            }
+                var readBackArray = Context.Instance.ReadBackArray;
+                if (IsReadingBack)
+                {
+                    await Task.Yield();
+                }
 
-            if (readBackArray.IsCreated) readBackArray.Dispose();
+                if (readBackArray.IsCreated) readBackArray.Dispose();
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
 
         protected override void Execute(CustomPassContext ctx)

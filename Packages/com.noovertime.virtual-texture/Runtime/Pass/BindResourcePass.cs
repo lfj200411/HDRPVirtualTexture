@@ -1,11 +1,14 @@
-using UnityEngine;
-using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 
 namespace NoOvertime.VirtualTexture
 {
     public class BindResourcePass : CustomPass
     {
+        public BindResourcePass()
+        {
+            name = nameof(BindResourcePass);
+        }
+
         protected override void Execute(CustomPassContext ctx)
         {
             ctx.cmd.SetGlobalTexture(Constant.Sector2VirtualImageInfoTextureID, Context.Instance.Sector2VirtualImageInfoTexture.RT);

@@ -19,6 +19,7 @@ namespace NoOvertime.VirtualTexture
 
         public RenderingPagePass(ProfilerMarker renderingPageMarker)
         {
+            name = nameof(RenderingPagePass);
             _renderingPageMarker = renderingPageMarker;
             for (int i = 0; i < Constant.MaxPhysicalPageCount; i++)
             {
@@ -55,11 +56,15 @@ namespace NoOvertime.VirtualTexture
                     var virtualPageSize = 1 << pageID.w;
                     // 先回到mip0, 而后右移再左移抹掉余数即可得到indirection page的起始位置
                     var indirectionPageXZ = ((pageID.xy << pageID.z) >> pageID.w) << pageID.w;
-                    // 当前page在sector中的相对位置
-                    var localPageID = (pageID.xy << pageID.z) - indirectionPageXZ;
                     // 计算得到sector后, 通过偏移sector即可得到真实的世界空间virtual image uv
                     bool getSector = Context.Instance.ImageInfo2Sector.TryGetValue(new int3(indirectionPageXZ, virtualPageSize), out var sector);
+                    if (!getSector)
+                    {
+                        continue;
+                    }
                     Assert.IsTrue(getSector);
+                    // 当前page在sector中的相对位置
+                    var localPageID = (pageID.xy << pageID.z) - indirectionPageXZ;
                     ulong lruKey = Utility.EncodeLRUKey(sector, localPageID, pageID.z, pageID.w);
                     // 先看下LruCache里是否存有此page
                     bool contains = _lruCache.Touch(lruKey, out var slot);
