@@ -13,7 +13,7 @@ namespace NoOvertime.VirtualTexture
         private readonly int _pageSizeShift; // 1 << _pageSizeShift == _pageSize
 
         private readonly bool[] _markAsUsed; // 记录atlas四叉树中的节点是否被占用
-        private readonly byte[] _markChildAsUsed; // 记录atlas四叉树中的节点中是否有子节点被占用
+        private readonly short[] _markChildAsUsed; // 记录atlas四叉树中的节点中是否有子节点被占用
         private readonly int _minimalVirtualImageSize;
 
         private readonly Stack<int4> _travelStack = new();
@@ -60,7 +60,7 @@ namespace NoOvertime.VirtualTexture
                 currentSizeNodeCount <<= 2;
             }
 
-            _markChildAsUsed = new byte[nodeCount]; // 父节点标记用不到最小级别的image
+            _markChildAsUsed = new short[nodeCount]; // 父节点标记用不到最小级别的image
             _markAsUsed = new bool[nodeCount + currentSizeNodeCount];
         }
 
@@ -121,7 +121,7 @@ namespace NoOvertime.VirtualTexture
                         while (parent != 0)
                         {
                             _markChildAsUsed[parent]++;
-                            parent >>= 2;
+                            parent = (parent - 1) >> 2;
                         }
 
                         _sector2ImageDictionary[sector] = currentNode;
