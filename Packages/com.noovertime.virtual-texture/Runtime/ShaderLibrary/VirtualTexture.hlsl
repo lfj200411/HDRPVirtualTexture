@@ -99,7 +99,7 @@ uint2 GetVirtualPageID(float3 positionWS, out float mip, out uint virtualPageSiz
     // (positionWS.xz % SECTOR_SIZE) 是先定位到相对于当前Sector的local坐标
     const float2 sectorPosition = positionWS.xz % SECTOR_SIZE;
     // * (1 << imageInfo.z) >> SECTOR_SIZE_SHIFT 是计算当前Sector上每一米有多少个virtual page(对应多少个physical page)
-    const uint2 virtualImageUV = ((uint2)(sectorPosition * (1 << virtualPageSizeLog))) >> SECTOR_SIZE_SHIFT;
+    const uint2 virtualImageUV = ((uint2)(sectorPosition * (1U << virtualPageSizeLog))) >> SECTOR_SIZE_SHIFT;
     // 再加上当前virtual image在atlas中的偏移和mip
     uint2 virtualPageID = (virtualImageUV + imageInfo.xy) >> ((uint)mip);
     return virtualPageID;
@@ -129,7 +129,7 @@ bool SampleVT(float3 positionRWS, out float4 baseMap, out float4 maskMap)
     const bool match = MatchMipLevel(virtualPageID, virtualPageSizeLog, mip, slot);
     if (match)
     {
-        const uint texelPerMeter = 1 << virtualPageSizeLog - mip;
+        const uint texelPerMeter = 1U << (virtualPageSizeLog - mip);
         const float2 sectorPosition = frac(positionWS.xz * INV_SECTOR_SIZE * texelPerMeter);
         float2 uvInPhysicalPage = (sectorPosition * PAGE_SIZE + 4.0f) * INV_PAGE_SIZE_WITH_BORDER;
         baseMap = SAMPLE_TEXTURE2D_ARRAY_LOD(PhysicalPageBaseMapAtlas, sampler_linear_clamp_aniso8, uvInPhysicalPage, slot, 0);

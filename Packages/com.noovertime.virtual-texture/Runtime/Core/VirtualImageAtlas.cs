@@ -117,8 +117,8 @@ namespace NoOvertime.VirtualTexture
                     if (virtualImageSize == _minimalVirtualImageSize || _markChildAsUsed[currentNode.x] == 0)
                     {
                         _markAsUsed[currentNode.x] = true; // 标记自身被占用
-                        int parent = currentNode.x >> 2; // 标记所有父节点中有子节点被占用加一
-                        while (parent != 0)
+                        int parent = (currentNode.x - 1) >> 2; // 标记所有父节点中有子节点被占用加一
+                        while (parent > 0)
                         {
                             _markChildAsUsed[parent]++;
                             parent = (parent - 1) >> 2;
@@ -158,11 +158,11 @@ namespace NoOvertime.VirtualTexture
         public void RemoveImage(in int4 imageInfo)
         {
             _markAsUsed[imageInfo.x] = false;
-            int parent = imageInfo.x >> 2; // 标记所有父节点中有子节点被占用减一
-            while (parent != 0)
+            int parent = (imageInfo.x - 1) >> 2; // 标记所有父节点中有子节点被占用减一
+            while (parent > 0)
             {
                 _markChildAsUsed[parent]--;
-                parent >>= 2;
+                parent = (parent - 1) >> 2;
             }
         }
 
